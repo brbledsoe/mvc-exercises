@@ -9,13 +9,15 @@
   </head>
 
   <body>
-    <input type="text" id="input">
+    <input type="text" id="input" placeholder="First Name">
+    <input type="text" id="input" placeholder="Last Name">
     <button id="submit">Submit</button>
     <div id="display"></div>
 
     <script>
-      var Controller = function (model) {
+      var Controller = function (model, view) {
         this.model = model;
+        this.view = view;
 
         this.updateText = function () {
           var text = $('#input').val();
@@ -23,12 +25,12 @@
           // TODO: Manipulate the Model's data, then notify the view to render itself
           this.model.set('text', text);
 
-          // this.view.render();
+          this.view.render();
         }
       }
 
       var model = new Backbone.Model();
-      var view = new Backbone.View({ model, el: $('#display') });
+      var view = new Backbone.View({ model: model, el: $('#display') });
 
       view.render = function () {
         // TODO: Display the Model's text in the div with id 'display'
@@ -36,10 +38,9 @@
         var textVal = this.model.get('text');
         // this.el.append(textVal);
         this.$el.append(textVal);
-      }
-      view.listenTo(model, 'change', view.render);
-
-      var controller = new Controller(model);
+      };
+      var $p = $("p");
+      var controller = new Controller(model, view);
 
       $('button').on('click', function (e) {
         e.preventDefault();
