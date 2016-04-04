@@ -9,38 +9,59 @@
   </head>
 
   <body>
-    <input type="text" id="input" placeholder="First Name">
-    <input type="text" id="input" placeholder="Last Name">
+    <input type="text" id="input1" placeholder="First Name">
+    <input type="text" id="input2" placeholder="Last Name">
     <button id="submit">Submit</button>
     <div id="display"></div>
+    <div id="display2"></div>
+
 
     <script>
-      var Controller = function (model, view) {
+      var Controller = function (model) {
         this.model = model;
-        this.view = view;
 
         this.updateText = function () {
-          var text = $('#input').val();
+          var text1 = $('#input1').val();
+
+          var text2 = $('#input2').val();
 
           // TODO: Manipulate the Model's data, then notify the view to render itself
-          this.model.set('text', text);
+          var array = [{'text': text1}, {'text2': text2}];  
+          this.model.set('key', array);
 
-          this.view.render();
+          // this.view.render();
         }
       }
-
+'<br>'
       var model = new Backbone.Model();
-      var view = new Backbone.View({ model: model, el: $('#display') });
+      var view1 = new Backbone.View({ model, el: $('#display') });
+      var view2 = new Backbone.View({ model, el: $('#display2') });
 
-      view.render = function () {
+      view1.render = function () {
         // TODO: Display the Model's text in the div with id 'display'
         // Hint: Remember how to "get" data from the Model
-        var textVal = this.model.get('text');
+        var textVal = this.model.get('key');
+        textVal = textVal[0]['text'];
         // this.el.append(textVal);
         this.$el.append(textVal);
-      };
-      var $p = $("p");
-      var controller = new Controller(model, view);
+      }
+
+
+
+      view2.render = function () {
+        // TODO: Display the Model's text in the div with id 'display'
+        // Hint: Remember how to "get" data from the Model
+        var textVal = this.model.get('key');
+        textVal = textVal[1]['text2'];
+        // this.el.append(textVal);
+        this.$el.append(textVal);
+      }
+
+      view1.listenTo(model, 'change', view1.render);
+
+      view2.listenTo(model, 'change', view2.render);
+
+      var controller = new Controller(model);
 
       $('button').on('click', function (e) {
         e.preventDefault();
