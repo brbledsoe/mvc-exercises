@@ -16,10 +16,12 @@
 
         this.getText = function () {
           // TODO: Return the text of the Model
+          return this.text;
         }
 
         this.setText = function (text) {
           // TODO: Set the text of the Model
+          return this.text = text;
         }
       };
 
@@ -29,6 +31,9 @@
         this.render = function () {
           // TODO: Display the Model's text in the div with id 'display'
           // Hint: Get the div from the DOM and set its innerText
+          var textVal = this.model.getText();
+
+          $('#display').append(textVal);
         }
       }
 
@@ -36,18 +41,26 @@
         this.model = model;
         this.view = view;
 
-        this.updateText = function () {
+        this.updateText = function (text) {
           // TODO: Update the model text with the input value
+          this.model.setText(text);
+
+          this.view.render();
         }
       }
 
+      // invocating the functions, just turning the model switch on
       var model = new Model();
       var view = new View(model);
       var controller = new Controller(model, view);
 
+      // click function: take text from input, display text in div
       var $button = $('button').on('click', function (e) {
         e.preventDefault();
         // call the right function here
+        var text = $('#input').val();
+        
+        controller.updateText(text);
       });
     </script>
   </body>

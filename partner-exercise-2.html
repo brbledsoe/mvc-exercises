@@ -18,21 +18,27 @@
         this.model = model;
         this.view = view;
 
-        this.updateText() {
+        this.updateText = function () {
           var text = $('#input').val();
 
           // TODO: Manipulate the Model's data, then notify the view to render itself
+          this.model.set('text', text);
+
+          this.view.render();
         }
       }
 
       var model = new Backbone.Model();
-      var view = new Backbone.View({ model, el: $('#display') });
+      var view = new Backbone.View({ model: model, el: $('#display') });
 
       view.render = function () {
         // TODO: Display the Model's text in the div with id 'display'
         // Hint: Remember how to "get" data from the Model
+        var textVal = this.model.get('text');
+        // this.el.append(textVal);
+        this.$el.append(textVal);
       };
-
+      var $p = $("p");
       var controller = new Controller(model, view);
 
       $('button').on('click', function (e) {
